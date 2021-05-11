@@ -7,8 +7,6 @@ const {percentChange} = require('./../utils/math');
 let cachedData = {};
 
 const sellAtHighestPriceMany = (binanceClient, logger) => {
-    logger.info(`start watching for multiple symbols`);
-
     return async () => {
         const symbolListToMonitor = config.get('task.sellAtHighestPriceMany.symbols');
 
