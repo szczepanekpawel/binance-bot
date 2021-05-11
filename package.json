@@ -1,0 +1,40 @@
+{
+  "name": "binance-bot",
+  "version": "0.0.1",
+  "description": "Binance Auto Trading Bot",
+  "scripts": {},
+  "keywords": [
+    "binance-bot"
+  ],
+  "author": "Paweł Szczepanek",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.21.1",
+    "binance-api-node": "^0.10.33",
+    "config": "^3.3.4",
+    "lodash": "^4.17.21",
+    "minimist": "^1.2.5",
+    "moment": "^2.29.1",
+    "moment-timezone": "^0.5.33",
+    "node-cron": "^3.0.0",
+    "technicalindicators": "^3.1.0",
+    "stock-technical-indicators": "^2.0.1",
+    "log4js": "^6.3.0"
+  },
+  "devDependencies": {
+    "eslint": "^7.21.0",
+    "eslint-config-airbnb": "^18.2.1",
+    "eslint-config-prettier": "^8.1.0",
+    "eslint-config-react-app": "^6.0.0",
+    "eslint-plugin-flowtype": "^5.3.1",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-jest": "^24.1.5",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^3.3.1",
+    "eslint-plugin-promise": "^4.3.1",
+    "eslint-plugin-react": "^7.22.0",
+    "eslint-plugin-react-hooks": "^4.2.0"
+  },
+  "main": "index.js"
+}

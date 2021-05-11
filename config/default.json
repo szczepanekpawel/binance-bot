@@ -1,0 +1,48 @@
+{
+  "mode": "live",
+  "tz": "Australia/Melbourne",
+  "binance": {
+    "keys": {
+      "apiKey": "",
+      "secretKey": ""
+    }
+  },
+  "task": {
+    "sellAtHighestPriceMany": {
+      "symbols": [
+        {
+          "symbol": "CTXC/USDT",
+          "price": 0.4884
+        },
+        {
+          "symbol": "DCR/USDT",
+          "price": 220.15
+        },
+        {
+          "symbol": "LSK/USDT",
+          "price": 9.3055
+        },
+        {
+          "symbol": "PROM/BUSD",
+          "price": 33.092
+        },
+        {
+          "symbol": "ANKR/USDT",
+          "price": 0.15589
+        },
+        {
+          "symbol": "BLZ/USDT",
+          "price": 0.36844
+        },
+        {
+          "symbol": "AKRO/USDT",
+          "price": 0.04953
+        },
+        {
+          "symbol": "SHIB/BUSD",
+          "price": 0.00003021
+        }
+      ]
+    }
+  }
+}
