@@ -12,7 +12,7 @@ let buyImmediately;
 
 const buySellUsingRsi = (binanceClient, logger, options) => {
     return async () => {
-        options = {interval: '15m', amount: 50, buyOnDemand: false, topRsi: 65, bottomRsi: 35, ...options};
+        options = {interval: '30m', amount: 50, buyOnDemand: false, topRsi: 65, bottomRsi: 35, ...options};
 
         const tradingSymbol = options.symbol.replace('/', '');
         const cryptoToken = options.symbol.split('/')[0]
