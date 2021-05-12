@@ -11,15 +11,16 @@ let buyImmediately;
 
 const buySellUsingSuperTrend = (binanceClient, logger, options) => {
     return async () => {
-        if (!options.cryptoSymbol || !options.currency || !options.interval || !options.amount || typeof options.buyOnDemand !== "boolean") {
-            throw new Error('Invalid buySellUsingSuperTrend arguments');
-        }
+        options = {interval: '15m', amount: 50, buyOnDemand: false, ...options};
+
+        const tradingSymbol = options.symbol.replace('/', '');
+        const cryptoToken = options.symbol.split('/')[0]
+        const currency = options.symbol.split('/')[1]
 
         if (typeof buyImmediately !== "boolean") {
             buyImmediately = options.buyOnDemand;
         }
 
-        const tradingSymbol = options.cryptoSymbol + options.currency;
         const trendIndicator = await superTrendIndicator(client, tradingSymbol, options.interval);
 
         if (buyImmediately || (trendIndicator.directionChanged && trendIndicator.direction === 1 && nextAction === BUY_ACTION)) {
@@ -27,7 +28,7 @@ const buySellUsingSuperTrend = (binanceClient, logger, options) => {
             lastBuyPrice = await buyOrder(tradingSymbol, options.amount, logger);
             nextAction = SELL_ACTION;
         } else if (trendIndicator.directionChanged && trendIndicator.direction === -1 && nextAction === SELL_ACTION) {
-            await sellAllOrder(options.cryptoSymbol, options.currency, logger);
+            await sellAllOrder(cryptoToken, currency, logger);
             nextAction = BUY_ACTION;
         }
     }

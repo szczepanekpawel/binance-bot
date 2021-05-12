@@ -7,11 +7,12 @@ let topPrice = false;
 
 const sellAtHighestPrice = (binanceClient, logger, options) => {
     return async () => {
-        if (!options.cryptoSymbol || !options.currency || !options.interval) {
-            throw new Error('Invalid sellAtHighestPrice arguments');
-        }
+        options = {currency: 'USDT', interval: '15m', ...options};
 
-        const tradingSymbol = options.cryptoSymbol + options.currency;
+        const tradingSymbol = options.symbol.replace('/', '');
+        const cryptoToken = options.symbol.split('/')[0]
+        const currency = options.symbol.split('/')[1]
+
         const candles = await client.candles({symbol: tradingSymbol, interval: options.interval, limit: 100});
 
         const candleStartPrice = Number(candles[candles.length - 1].open);
@@ -34,7 +35,7 @@ const sellAtHighestPrice = (binanceClient, logger, options) => {
 
             if (topPriceDownChange < -2) {
                 console.log('selling all');
-                await sellAllOrder(options.cryptoSymbol, options.currency, logger);
+                await sellAllOrder(cryptoToken, currency, logger);
                 process.exit();
             }
         }

@@ -1,32 +1,21 @@
 const args = require('minimist')((process.argv.slice(2)));
 const log4js = require("log4js");
-const fs = require('fs')
+const fs = require('fs');
 
 const registerExitHandler = require('./system/node-process');
 const algorithms = require('./utils/algorithms');
 const binanceClient = require('./utils/binance-client');
-const buySellUsingRsi = require('./tasks/buySellUsingRsi');
+const {buySellUsingRsi, constraints} = require('./tasks/buySellUsingRsi');
 const buySellUsingSuperTrend = require('./tasks/buySellUsingSupertrend');
 const sellAtHighestPrice = require('./tasks/sellAtHighestPrice');
 const sellAtHighestPriceMany = require('./tasks/sellAtHighestPriceMany');
 
-const algorithm = args.algorithm;
-const symbol = args.symbol ? args.symbol.split('/')[0] : undefined;
-const currency = args.symbol ? args.symbol.split('/')[1] : undefined;
-const defCurrency = 'USDT';
-const interval = args.interval || '5m';
-const amount = args.amount || 30;
-const instantBuy = Boolean(args.instant);
+console.log(args);
 
-let logFilename = `${algorithm}_${symbol}_${currency}_${interval}_${amount}`.toLowerCase();
-
-if (algorithm === algorithms.SELL_MAX_LIST) {
-    logFilename = `${algorithm}`.toLowerCase();
-}
-
+let logFilename = Object.values(args).join('_').replace('/', '_').toLowerCase();
 const logFilePath = `./logs/${logFilename}.log`;
 
-if(fs.existsSync(logFilePath)) {
+if (fs.existsSync(logFilePath)) {
     fs.unlinkSync(logFilePath);
 }
 
@@ -42,19 +31,38 @@ registerExitHandler(() => {
 })
 
 module.exports = {
-    args: {
-        algorithm, symbol, currency, interval, amount, instantBuy
-    },
+    args,
     tasks: {
-        [algorithms.TOP_BOTTOM_RSI]: buySellUsingRsi(binanceClient, log4js.getLogger(), {
-            cryptoSymbol: symbol, currency: currency || defCurrency, interval: interval, amount: amount, buyOnDemand: instantBuy
-        }),
-        [algorithms.SUPERTREND]: buySellUsingSuperTrend(binanceClient, log4js.getLogger(), {
-            cryptoSymbol: symbol, currency: currency || defCurrency, interval: interval, amount: amount, buyOnDemand: instantBuy
-        }),
-        [algorithms.SELL_MAX]: sellAtHighestPrice(binanceClient, log4js.getLogger(), {
-            cryptoSymbol: symbol, currency: currency || defCurrency, interval: interval
-        }),
-        [algorithms.SELL_MAX_LIST]: sellAtHighestPriceMany(binanceClient, log4js.getLogger()),
+        [algorithms.TOP_BOTTOM_RSI]: {
+            worker: buySellUsingRsi(binanceClient, log4js.getLogger(), args),
+            params: {
+                symbol: { presence: true, type: 'string' },
+                interval: { presence: false, type: 'string' },
+                amount: { presence: false, type: 'string' },
+                buyOnDemand: { presence: false, type: 'boolean' },
+            }
+        },
+        [algorithms.SUPERTREND]: {
+            worker: buySellUsingSuperTrend(binanceClient, log4js.getLogger(), args),
+            params: {
+                symbol: { presence: true, type: 'string' },
+                interval: { presence: false, type: 'string' },
+                amount: { presence: false, type: 'string' },
+                buyOnDemand: { presence: false, type: 'boolean' },
+            }
+
+        },
+        [algorithms.SELL_MAX]: {
+            worker: sellAtHighestPrice(binanceClient, log4js.getLogger(), args),
+            params: {
+                symbol: { presence: true, type: 'string' },
+                interval: { presence: false, type: 'string' },
+            }
+
+        },
+        [algorithms.SELL_MAX_LIST]: {
+            worker: sellAtHighestPriceMany(binanceClient, log4js.getLogger()),
+            params: {}
+        },
     }
-};
+}

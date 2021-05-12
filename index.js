@@ -7,16 +7,27 @@
  */
 
 const cron = require('node-cron');
+const {validate} = require('validate.js');
 const {args, tasks} = require('./src/bootstrap');
 
-cron.schedule('* * * * *', async () => {
-    if (tasks[args.algorithm]) {
+if (tasks[args.algorithm]) {
+
+    const validation = validate(args, tasks[args.algorithm]['params']);
+
+    if (validation) {
+        throw new Error(JSON.stringify(validation));
+    }
+
+    cron.schedule('* * * * *', async () => {
         try {
-            await tasks[args.algorithm].call();
+            await tasks[args.algorithm]['worker'].call();
         } catch (e) {
             console.error('Task error', e);
         }
-    } else {
-        console.log('unsupported algorithm');
-    }
-});
+    });
+
+} else {
+    console.log('unsupported algorithm');
+}
+
+
