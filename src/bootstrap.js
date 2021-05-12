@@ -36,7 +36,7 @@ module.exports = {
             params: {
                 symbol: { presence: true, type: 'string' },
                 interval: { presence: false, type: 'string' },
-                amount: { presence: false, type: 'string' },
+                amount: { presence: false, type: 'integer' },
                 buyOnDemand: { presence: false, type: 'boolean' },
             }
         },
@@ -45,7 +45,7 @@ module.exports = {
             params: {
                 symbol: { presence: true, type: 'string' },
                 interval: { presence: false, type: 'string' },
-                amount: { presence: false, type: 'string' },
+                amount: { presence: false, type: 'integer' },
                 buyOnDemand: { presence: false, type: 'boolean' },
             }
 
