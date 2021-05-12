@@ -10,8 +10,6 @@ const buySellUsingSuperTrend = require('./tasks/buySellUsingSupertrend');
 const sellAtHighestPrice = require('./tasks/sellAtHighestPrice');
 const sellAtHighestPriceMany = require('./tasks/sellAtHighestPriceMany');
 
-console.log(args);
-
 let logFilename = Object.values(args).join('_').replace('/', '_').toLowerCase();
 const logFilePath = `./logs/${logFilename}.log`;
 
