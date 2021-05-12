@@ -27,7 +27,7 @@ const buySellUsingSuperTrend = (binanceClient, logger, options) => {
             lastBuyPrice = await buyOrder(tradingSymbol, options.amount, logger);
             nextAction = SELL_ACTION;
         } else if (trendIndicator.directionChanged && trendIndicator.direction === -1 && nextAction === SELL_ACTION) {
-            await sellAllOrder(options.cryptoSymbol, options.currency, options.amount, logger);
+            await sellAllOrder(options.cryptoSymbol, options.currency, logger);
             nextAction = BUY_ACTION;
         }
     }

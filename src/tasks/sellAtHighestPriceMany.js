@@ -66,7 +66,7 @@ const sellAtHighestPriceMany = (binanceClient, logger) => {
                             await sellAllOrder(cryptoSymbol, currency, logger);
                             cachedData[tradingStringPairs].sold = true;
                         } catch (e) {
-
+                            logger.info(e);
                         }
 
                     }

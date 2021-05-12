@@ -29,8 +29,12 @@ const buySellUsingRsi = (binanceClient, logger, options) => {
             nextAction = SELL_ACTION;
         } else if (rsi > 65 && nextAction === SELL_ACTION && Number(lastCandle.close) > Number(lastBuyPrice)) {
             logger.info(`rsi is above 65 - selling`);
-            await sellAllOrder(options.cryptoSymbol, options.currency, options.amount, logger);
-            nextAction = BUY_ACTION;
+            try {
+                await sellAllOrder(options.cryptoSymbol, options.currency, logger);
+                nextAction = BUY_ACTION;
+            } catch (e) {
+                logger.error(JSON.stringify(e));
+            }
         } else {
             logger.info(`rsi is ${rsi}, doing nothing`);
         }
