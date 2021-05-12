@@ -38,6 +38,8 @@ module.exports = {
                 interval: { presence: false, type: 'string' },
                 amount: { presence: false, type: 'integer' },
                 buyOnDemand: { presence: false, type: 'boolean' },
+                bottomRsi: { presence: false, type: 'integer' },
+                topRsi: { presence: false, type: 'integer' },
             }
         },
         [algorithms.SUPERTREND]: {

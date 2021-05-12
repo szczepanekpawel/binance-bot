@@ -12,7 +12,7 @@ let buyImmediately;
 
 const buySellUsingRsi = (binanceClient, logger, options) => {
     return async () => {
-        options = {interval: '15m', amount: 50, buyOnDemand: false, ...options};
+        options = {interval: '15m', amount: 50, buyOnDemand: false, topRsi: 65, bottomRsi: 35, ...options};
 
         const tradingSymbol = options.symbol.replace('/', '');
         const cryptoToken = options.symbol.split('/')[0]
@@ -24,12 +24,12 @@ const buySellUsingRsi = (binanceClient, logger, options) => {
             buyImmediately = options.buyOnDemand;
         }
 
-        if (buyImmediately || (rsi < 35 && nextAction === BUY_ACTION)) {
+        if (buyImmediately || (rsi < options.bottomRsi && nextAction === BUY_ACTION)) {
             logger.info(`rsi is below 35 - buying`);
             buyImmediately = false
             lastBuyPrice = await buyOrder(tradingSymbol, options.amount, logger);
             nextAction = SELL_ACTION;
-        } else if (rsi > 65 && nextAction === SELL_ACTION && Number(lastCandle.close) > Number(lastBuyPrice)) {
+        } else if (rsi > options.topRsi && nextAction === SELL_ACTION && Number(lastCandle.close) > Number(lastBuyPrice)) {
             logger.info(`rsi is above 65 - selling`);
             try {
                 await sellAllOrder(cryptoToken, currency, logger);
